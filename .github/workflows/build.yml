@@ -35,8 +35,10 @@ jobs:
           echo "Project directory: $PROJECT_DIR"
           cd "$PROJECT_DIR"
           flutter create . --platforms=android,ios --org com.kalokagatia
+          flutter pub add timezone:^0.11.2
           flutter pub get
           flutter build apk --release
+
 
       - name: Collect APK
         run: |
