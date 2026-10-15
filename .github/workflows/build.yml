@@ -57,9 +57,12 @@ jobs:
               ":const SizedBox();})])))]);}",
               ":const SizedBox();})]))))]);}",
           )
-
           path.write_text(code, encoding="utf-8")
+
           PY
+                    sed -i '/compileOptions {/a\        isCoreLibraryDesugaringEnabled = true' android/app/build.gradle.kts
+          printf '\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")\n}\n' >> android/app/build.gradle.kts
+
           flutter build apk --release
 
        
