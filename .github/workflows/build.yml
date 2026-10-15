@@ -37,8 +37,32 @@ jobs:
                     flutter create . --platforms=android,ios --org com.kalokagatia --no-pub
           sed -i 's/timezone: \^0.10.1/timezone: ^0.11.2/' pubspec.yaml
           flutter pub get
+                    python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("lib/main.dart")
+          code = path.read_text(encoding="utf-8")
+
+          code = code.replace(
+              "await plugin.initialize(init);",
+              "await plugin.initialize(settings: init);",
+          )
+
+          code = code.replace(
+              "await plugin.zonedSchedule(r.$1,r.$2,r.$3,at,details,androidScheduleMode:",
+              "await plugin.zonedSchedule(id:r.$1,title:r.$2,body:r.$3,scheduledDate:at,notificationDetails:details,androidScheduleMode:",
+          )
+
+          code = code.replace(
+              ":const SizedBox();})])))]);}",
+              ":const SizedBox();})]))))]);}",
+          )
+
+          path.write_text(code, encoding="utf-8")
+          PY
           flutter build apk --release
-          flutter build apk --release
+
+       
 
 
       - name: Collect APK
